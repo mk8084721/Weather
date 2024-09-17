@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="InitialSetup">Initial Setup</string>
+    <string name="location">Location</string>
+    <string name="notification">Notification</string>
+    <string name="GPS">GPS</string>
+    <string name="Map">Map</string>
 </resources>
