@@ -5,4 +5,12 @@
     <string name="notification">Notification</string>
     <string name="GPS">GPS</string>
     <string name="Map">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Settings">Settings</string>
+    <string name="Alerts">Alerts</string>
+    <string name="Favorite">Favorite</string>
+    <string name="Home">Home</string>
+    <string name="Weather">Weather</string>
+    <string name="API_WEATHER_KEY">806997291266b80b0594146105e26982</string>
 </resources>
