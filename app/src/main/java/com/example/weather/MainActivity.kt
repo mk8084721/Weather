@@ -39,15 +39,12 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var alertBinding: FirstTimeAlertBinding
-    private lateinit var fusedClient : FusedLocationProviderClient
     lateinit var navigationView: NavigationView
     lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fusedClient = LocationServices.getFusedLocationProviderClient(this)
         navigationView = binding.bottomNavView
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -85,8 +82,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         drawerLayout = binding.main
+
+        val lon = intent.getDoubleExtra("lon", 0.0)
+        val lat = intent.getDoubleExtra("lat", 0.0)
+        Log.i("TAG", "in MainActivity:\nlon:$lon\nlat$lat")
+        // Create a bundle and pass it to HomeFragment
+        val bundle = Bundle().apply {
+            putDouble("lat", lat)  // latitude obtained
+            putDouble("lon", lon)  // longitude obtained
+        }
         val navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(navigationView, navController)
+
+        navController.navigate(R.id.homeFragment, bundle)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val customView = actionBar?.customView
@@ -102,6 +110,11 @@ class MainActivity : AppCompatActivity() {
                 else -> titleTextView?.text = "Weather App"
             }
         }
+//        val bundle = Bundle().apply {
+//            putDouble("lat", lat)
+//            putDouble("lon", longitude)
+//        }
+//        navController.navigate(R.id.homeFragment, bundle)
         /*if (isFirstTime(this)) {
             showFirstTimeCustomAlert()
             setFirstTimeFlag(this, false)
@@ -109,106 +122,6 @@ class MainActivity : AppCompatActivity() {
         //showFirstTimeCustomAlert()
 
     }
-
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START)
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }*/
-
-    private fun showFirstTimeCustomAlert() {
-
-        val inflater: LayoutInflater = LayoutInflater.from(this)
-
-        alertBinding = FirstTimeAlertBinding.inflate(inflater)
-
-        val alertDialog = AlertDialog.Builder(this)
-            .setView(alertBinding.root)
-            .create()
-
-        alertBinding.btnOk.setOnClickListener {
-            when (alertBinding.radioGroup.checkedRadioButtonId) {
-                alertBinding.gpsBtn.id -> {
-                    getGpsLocation()
-                }
-                alertBinding.mapBtn.id -> {
-                    //doMapAction()
-                }
-            }
-
-            alertDialog.dismiss()
-        }
-
-        alertDialog.show()
-    }
-
-    private fun getGpsLocation() {
-        if (checkPermissions()){
-            if(isLocationEnabled()){
-                getFreshLocation()
-            }else{
-                enableLocationService()
-            }
-        }else{
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION),2005)
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun getFreshLocation() {
-        fusedClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedClient.requestLocationUpdates(
-            LocationRequest.Builder(0).apply {
-                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-            }.build(),
-            object : LocationCallback() {
-                override fun onLocationResult(p0: LocationResult) {
-                    super.onLocationResult(p0)
-                    Log.i("TAG", "onLocationResult: ${p0.locations.get(0).toString()}")
-//                    latitudeTxt.text=p0.locations.get(0).latitude.toString()
-//                    longtudeTxt.text=p0.locations.get(0).longitude.toString()
-                    val geocoder = Geocoder(baseContext, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(
-                        p0.locations.get(0).latitude,
-                        p0.locations.get(0).longitude,
-                        1
-                    )
-                    if (addresses != null && !addresses.isEmpty()) {
-                        val address = addresses[0]
-                        val addressText = address.getAddressLine(0) // Full address
-                        //addressTxt.text = addressText
-
-                    }
-
-
-                }
-            },
-            Looper.myLooper()
-        )
-    }
-
-    private fun checkPermissions(): Boolean {
-        return checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-    fun enableLocationService(){
-        Toast.makeText(this , "Turn On Location", Toast.LENGTH_LONG).show()
-        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        startActivity(intent)
-    }
-    private fun isLocationEnabled():Boolean{
-        val locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER)
-    }
-
 
     // Using Shared Preferance to Detect If It's The First Time
     fun isFirstTime(context: Context): Boolean {

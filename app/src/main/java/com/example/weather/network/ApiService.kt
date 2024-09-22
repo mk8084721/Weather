@@ -1,6 +1,7 @@
 package com.example.weather.network
 
 import com.example.weather.model.CurrentWeather
+import com.example.weather.model.ForecastWeather
 import de.hdodenhof.circleimageview.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,10 +11,20 @@ import retrofit2.http.Query
 
 interface ApiService{
     @GET("weather")
-    suspend fun getCurrentWeather(@Query("lat") lat: Double,
-                                  @Query("lon") lon: Double,
+    suspend fun getCurrentWeather(@Query("lon") lon: Double,
+                                  @Query("lat") lat: Double,
+                                  @Query("lang") lang: String = "en",
+                                  @Query("units") units: String ="metric",
                                   @Query("appid") apiKey: String = "806997291266b80b0594146105e26982"
     ): CurrentWeather
+    @GET("forecast")
+    suspend fun getWeatherForecast(@Query("lon") lon: Double,
+                                   @Query("lat") lat: Double,
+                                   @Query("lang") lang: String = "en",
+                                   @Query("units") units: String ="metric",
+                                   @Query("appid") apiKey: String = "806997291266b80b0594146105e26982"
+    ): ForecastWeather
+    //api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid={API key}
 }
 
 object RetrofitHelper{

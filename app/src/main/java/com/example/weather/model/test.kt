@@ -10,7 +10,7 @@ import kotlinx.coroutines.runBlocking
 suspend fun main(){
     var repo = allProductsRepo(API.retrofitService)
     coroutineScope {
-        API.retrofitService.getCurrentWeather(45.133,7.367)
+        API.retrofitService.getWeatherForecast(45.133,7.367)
         repo.getAllRemoteProducts().collect{
             value -> println(value)
         }
@@ -18,9 +18,9 @@ suspend fun main(){
 }
 
 class allProductsRepo( var remoteDataSource: ApiService) {
-    suspend fun getAllRemoteProducts(): Flow<CurrentWeather> {
+    suspend fun getAllRemoteProducts(): Flow<ForecastWeather> {
         return flow {
-            val weather = remoteDataSource.getCurrentWeather(45.133, 7.367) // This now returns a Products object
+            val weather = remoteDataSource.getWeatherForecast(45.133, 7.367) // This now returns a Products object
             emit(weather)
         }
     }

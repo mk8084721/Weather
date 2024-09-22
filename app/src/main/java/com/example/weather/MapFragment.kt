@@ -34,7 +34,7 @@ class MapFragment : Fragment() {
         mapView.setMultiTouchControls(true)
 
         // Set the default zoom level and position
-        val startPoint = GeoPoint(48.8583, 2.2944) // Example: Eiffel Tower
+        val startPoint = GeoPoint(30.7238221, 30.7340145) // Example: Eiffel Tower
         mapView.controller.setZoom(15.0)
         mapView.controller.setCenter(startPoint)
 
@@ -59,11 +59,11 @@ class MapFragment : Fragment() {
                 mapView.overlays.clear() // Clear previous markers
                 mapView.overlays.add(marker)
                 mapView.invalidate()
-
+                Log.i("TAG", "Map:\nlon: ${geoPoint.longitude}\n${geoPoint.latitude} ")
                 // Send the latitude and longitude to another activity
                 val intent = Intent(activity, MainActivity::class.java).apply {
-                    putExtra("LATITUDE", geoPoint.latitude)
-                    putExtra("LONGITUDE", geoPoint.longitude)
+                    putExtra("lat", geoPoint.latitude)
+                    putExtra("lon", geoPoint.longitude)
                 }
                 startActivity(intent)
 
