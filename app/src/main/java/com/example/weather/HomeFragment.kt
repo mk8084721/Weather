@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.weather.databinding.FragmentHomeBinding
+import com.example.weather.model.Coord
 import com.example.weather.viewModel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -29,6 +30,18 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var lon = arguments?.getDouble("lon")
+        var lat = arguments?.getDouble("lat")
+        lateinit var coord : Coord
+        if (lon != null && lat!= null) {
+            coord = Coord(lon, lat)
+            if (lon == 0.0 && lat == 0.0){
+                //todo Error getting location
+            }else{
+
+            }
+        }
+
 
     }
 

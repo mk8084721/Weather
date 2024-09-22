@@ -1,7 +1,7 @@
 package com.example.weather.model
 
 data class CurrentWeather(
-    var coord: Crood,
+    var coord: Coord,
     var weather: Array<WeatherStatus>,
     var base:String,
     var main: Temp,

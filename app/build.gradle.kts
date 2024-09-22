@@ -2,24 +2,16 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
 }
-//val localProperties = File(rootProject.rootDir,"secrets.pro")
 
 android {
     namespace = "com.example.weather"
     compileSdk = 34
 
     defaultConfig {
-        // Load the API key from local.properties
-        val properties = Properties()
-        properties.load(FileInputStream(rootProject.file("local.properties")))
-        var apiKey = properties.getProperty("API_Key") ?: ""
-
-        // Pass the API key to BuildConfig
-        //buildConfigField("String", "API_KEY", "\"${apiKey}\"")
         applicationId = "com.example.weather"
         minSdk = 24
         targetSdk = 34
@@ -85,7 +77,6 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
 
-
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
 
@@ -97,4 +88,8 @@ dependencies {
     //ViewModel
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+
+    //OSM Maps
+    implementation("org.osmdroid:osmdroid-android:6.1.11")
+
 }
