@@ -1,4 +1,4 @@
-package com.example.weather.Home
+package com.example.weather.Home.view
 
 import android.content.Context
 import android.os.Build
@@ -8,12 +8,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.weather.databinding.ItemHourlyWeatherBinding
-import com.example.weather.model.CurrentWeather
-import java.net.MalformedURLException
-import java.net.URL
+import com.example.weather.network.model.CurrentWeather
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

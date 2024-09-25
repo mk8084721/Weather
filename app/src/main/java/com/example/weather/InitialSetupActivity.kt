@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,29 +18,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.weather.Repo.WeatherRepo
+import com.example.weather.database.LocalDataSource
+import com.example.weather.database.model.HomeWeather
 import com.example.weather.databinding.ActivityInitialSetupBinding
 import com.example.weather.databinding.FirstTimeAlertBinding
-import com.example.weather.model.Coord
+import com.example.weather.network.API
+import com.example.weather.Home.viewModel.HomeViewModel
+import com.example.weather.Home.viewModel.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.Locale
 
 class InitialSetupActivity : AppCompatActivity() {
     lateinit var binding: ActivityInitialSetupBinding
     lateinit var alertBinding: FirstTimeAlertBinding
     private lateinit var fusedClient : FusedLocationProviderClient
+    lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         //setContentView(R.layout.activity_initial_setup)
+        val homeViewModelFactory = HomeViewModelFactory(WeatherRepo(LocalDataSource(this.baseContext) , API.retrofitService))
+        viewModel = ViewModelProvider(this , homeViewModelFactory).get(HomeViewModel::class.java)
+
         binding = ActivityInitialSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -52,12 +51,16 @@ class InitialSetupActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
-        showFirstTimeCustomAlert()
-        /*if (isFirstTime(this)) {
+
+        if (isFirstTime(this)) {
             Log.i("TAG", "onCreate: Alert")
+            viewModel.insertEmptyHomeWeather(HomeWeather(1,0.0f,0.0f,"","","","",0.0f,0.0f,""))
             showFirstTimeCustomAlert()
-            //setFirstTimeFlag(this, false)
-        }*/
+            setFirstTimeFlag(this, false)
+        }else{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showFirstTimeCustomAlert() {
@@ -131,10 +134,10 @@ class InitialSetupActivity : AppCompatActivity() {
             } else {
                 // Permission was denied
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+                viewModel.saveLocationSHP(this,0.0f,0.0f)
+
                 val intent = Intent(this, MainActivity::class.java)
                 Log.i("TAG", "showFirstTimeCustomAlert: \nlon : ${0.0} \nlat : ${0.0}")
-                intent.putExtra("lat", 0.0)
-                intent.putExtra("lon", 0.0)
                 startActivity(intent)
             }
         }
@@ -143,66 +146,29 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun getCurrentLocation(){
         fusedClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
-                val latitude = location.latitude
-                val longitude = location.longitude
+                val latitude = location.latitude.toFloat()
+                val longitude = location.longitude.toFloat()
+                viewModel.saveLocationSHP(this,longitude,latitude)
+
                 Toast.makeText(this, "Lat: $latitude, Long: $longitude", Toast.LENGTH_SHORT).show()
                 Log.i("TAG", "getCurrent Location: \nlon : ${longitude} \nlat : ${latitude}")
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("lat", latitude)
-                intent.putExtra("lon", longitude)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
+                viewModel.saveLocationSHP(this,0.0f,0.0f)
                 val intent = Intent(this, MainActivity::class.java)
                 Log.i("TAG", "showFirstTimeCustomAlert: \nlon : ${0.0} \nlat : ${0.0}")
-                intent.putExtra("lat", 0.0)
-                intent.putExtra("lon", 0.0)
                 startActivity(intent)
             }
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    suspend fun getFreshLocation() {
-        fusedClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedClient.requestLocationUpdates(
-            LocationRequest.Builder(0).apply {
-                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-            }.build(),
-            object : LocationCallback() {
-                override fun onLocationResult(p0: LocationResult) {
-                    super.onLocationResult(p0)
-                    Log.i("TAG", "onLocationResult: ${p0.locations.get(0).toString()}")
-//                    coord.latitude = p0.locations.get(0).latitude
-//                    coord.longitude = p0.locations.get(0).longitude
-
-//                    latitudeTxt.text=p0.locations.get(0).latitude.toString()
-//                    longtudeTxt.text=p0.locations.get(0).longitude.toString()
-                    /*val geocoder = Geocoder(baseContext, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(
-                        p0.locations.get(0).latitude,
-                        p0.locations.get(0).longitude,
-                        1
-                    )
-                    if (addresses != null && !addresses.isEmpty()) {
-                        val address = addresses[0]
-                        val addressText = address.getAddressLine(0) // Full address
-                        //addressTxt.text = addressText
-
-                    }*/
-
-
-                }
-            },
-            Looper.myLooper()
-        )
     }
 
     private fun checkPermissions(): Boolean {
         return checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
-    fun enableLocationService(){
+    private fun enableLocationService(){
         Toast.makeText(this , "Turn On Location", Toast.LENGTH_LONG).show()
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)

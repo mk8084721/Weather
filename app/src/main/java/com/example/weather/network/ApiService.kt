@@ -1,8 +1,7 @@
 package com.example.weather.network
 
-import com.example.weather.model.CurrentWeather
-import com.example.weather.model.ForecastWeather
-import de.hdodenhof.circleimageview.BuildConfig
+import com.example.weather.network.model.CurrentWeather
+import com.example.weather.network.model.ForecastWeather
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -11,15 +10,15 @@ import retrofit2.http.Query
 
 interface ApiService{
     @GET("weather")
-    suspend fun getCurrentWeather(@Query("lon") lon: Double,
-                                  @Query("lat") lat: Double,
+    suspend fun getCurrentWeather(@Query("lon") lon: Float,
+                                  @Query("lat") lat: Float,
                                   @Query("lang") lang: String = "en",
                                   @Query("units") units: String ="metric",
                                   @Query("appid") apiKey: String = "806997291266b80b0594146105e26982"
     ): CurrentWeather
     @GET("forecast")
-    suspend fun getWeatherForecast(@Query("lon") lon: Double,
-                                   @Query("lat") lat: Double,
+    suspend fun getWeatherForecast(@Query("lon") lon: Float,
+                                   @Query("lat") lat: Float,
                                    @Query("lang") lang: String = "en",
                                    @Query("units") units: String ="metric",
                                    @Query("appid") apiKey: String = "806997291266b80b0594146105e26982"
