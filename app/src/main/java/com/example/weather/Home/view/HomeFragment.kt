@@ -28,6 +28,7 @@ import com.example.weather.network.ApiState
 import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
 import com.example.weather.MapFragmentArgs
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -72,7 +73,8 @@ class HomeFragment : Fragment() {
                 //todo Error getting location
             }else{
                 if(args.lat != -1.0f && args.lon != -1.0f){
-                    viewModel.getCurrentWeather(lon,lat)
+                    viewModel.getCurrentWeather(args.lon,args.lat)
+                    Log.i("TAG", "its Online: \nlon : ${args.lon} \nlat : ${args.lat}")
                     lifecycleScope.launch {
                         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
                             viewModel.currentWeatherSF.collectLatest{
@@ -85,7 +87,7 @@ class HomeFragment : Fragment() {
                                         var currentWeather = result.data
                                         //binding.locationName.text = currentWeather.name
                                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                                        val addresses = geocoder.getFromLocation(lat.toDouble(), lon.toDouble(), 1)
+                                        val addresses = geocoder.getFromLocation(args.lat.toDouble(), args.lon.toDouble(), 1)
                                         if (addresses != null && !addresses.isEmpty()) {
                                             val address = addresses[0]
                                             val city = address.locality ?: "Unknown City"
@@ -141,6 +143,7 @@ class HomeFragment : Fragment() {
                 }
                 else {
                     viewModel.getHomeWeather()
+                    Log.i("TAG", "its Offline: \nlon : ${args.lon} \nlat : ${args.lat}")
                     var todayDate = LocalDate.now()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     lifecycleScope.launch {
@@ -178,7 +181,7 @@ class HomeFragment : Fragment() {
                                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                                         var city = "Unknown City"
                                         val addresses = geocoder.getFromLocation(lat.toDouble(), lon.toDouble(), 1)
-                                        if (addresses != null && !addresses.isEmpty()) {
+                                        if (!addresses.isNullOrEmpty()) {
                                             val address = addresses[0]
                                             city = address.locality ?: "Unknown City"
                                         }
@@ -242,8 +245,9 @@ class HomeFragment : Fragment() {
             Log.i("TAG", "on home fragment the lon is null")
         }
 
-
     }
+
+
     fun showHomeData(currentWeather: HomeWeather){
         binding.dateTxt.text = currentWeather.date
         binding.locationName.text = currentWeather.locationName

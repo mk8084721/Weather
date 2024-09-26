@@ -102,10 +102,10 @@ class MainActivity : AppCompatActivity() {
 
             // Set the Action Bar title based on the fragment
             when (destination.id) {
-                R.id.homeFragment -> titleTextView?.text = "Home"
-                R.id.favoriteFragment -> titleTextView?.text = "Favorite"
-                R.id.alertsFragment -> titleTextView?.text = "Alerts"
-                R.id.settingsFragment -> titleTextView?.text = "Settings"
+                R.id.blankFragment -> titleTextView?.text = getString(R.string.Home)
+                R.id.favoriteFragment -> titleTextView?.text = getString(R.string.Favorite)
+                R.id.alertsFragment -> titleTextView?.text = getString(R.string.Alerts)
+                R.id.settingsFragment -> titleTextView?.text = getString(R.string.Settings)
                 // Add more cases for other fragments
                 else -> titleTextView?.text = "Weather App"
             }
