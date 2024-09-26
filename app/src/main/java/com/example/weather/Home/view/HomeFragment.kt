@@ -17,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.LocalDataSource
@@ -26,6 +27,7 @@ import com.example.weather.network.API
 import com.example.weather.network.ApiState
 import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
+import com.example.weather.MapFragmentArgs
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -57,6 +59,7 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val args: HomeFragmentArgs by navArgs()
         var(lon , lat)= viewModel.getLocationSHP(requireContext())
         var hourlyAdapter = HourlyWeatherAdapter()
         binding.hourlyRV.apply {
@@ -68,8 +71,7 @@ class HomeFragment : Fragment() {
             if (lon == 0.0f && lat == 0.0f){
                 //todo Error getting location
             }else{
-                var page = "null"
-                if(page =="fav"){
+                if(args.lat != -1.0f && args.lon != -1.0f){
                     viewModel.getCurrentWeather(lon,lat)
                     lifecycleScope.launch {
                         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){

@@ -2,6 +2,7 @@ package com.example.weather.Repo
 
 import android.content.Context
 import com.example.weather.database.LocalDataSource
+import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
 import com.example.weather.network.model.CurrentWeather
 import com.example.weather.network.model.ForecastWeather
@@ -23,6 +24,9 @@ class WeatherRepo(var localDataSource : LocalDataSource , var remoteDataSource:A
             emit(forecastWeather)
         }
     }
+
+    //// Home ////////////////
+
     fun getHomeWeather(): Flow<List<HomeWeather>> {
         return localDataSource.getHomeWeather()
     }
@@ -34,6 +38,21 @@ class WeatherRepo(var localDataSource : LocalDataSource , var remoteDataSource:A
     fun updateHomeWeather(homeWeather: List<HomeWeather>) {
         localDataSource.updateHomeWeather(homeWeather)
     }
+
+    //// Favorite ////////////////
+
+    fun getAllFavWeather(): Flow<List<Favorite>> {
+        return localDataSource.getAllFavWeather()
+    }
+    fun insertFavWeather(list: List<Favorite>) {
+        localDataSource.insertFavWeather(list)
+    }
+    fun deleteFavWeather(list: List<Favorite>) {
+        localDataSource.deleteFavWeather(list)
+    }
+
+    //// SHP /////////////////////
+
     fun saveLocationToPreferences(context: Context, latitude: Float, longitude: Float) {
         val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -54,6 +73,9 @@ class WeatherRepo(var localDataSource : LocalDataSource , var remoteDataSource:A
 
         return Pair(latitude, longitude)
     }
+
+
+
 //    val (latitude, longitude) = getLocationFromPreferences(context)
 //    Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
 

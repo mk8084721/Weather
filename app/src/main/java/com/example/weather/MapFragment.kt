@@ -1,28 +1,47 @@
 package com.example.weather
 
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.example.weather.Favorite.FavoriteViewModel
+import com.example.weather.Favorite.FavoriteViewModelFactory
+import com.example.weather.Home.viewModel.HomeViewModel
+import com.example.weather.Home.viewModel.HomeViewModelFactory
+import com.example.weather.Repo.WeatherRepo
+import com.example.weather.database.LocalDataSource
+import com.example.weather.database.model.Favorite
+import com.example.weather.network.API
+import kotlinx.coroutines.NonCancellable.equals
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
+import java.util.Locale
 
 class MapFragment : Fragment() {
 
     private lateinit var mapView: MapView
+    private lateinit var favViewModel : FavoriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
+        val favoriteViewModelFactory = FavoriteViewModelFactory(WeatherRepo(LocalDataSource(requireContext()) , API.retrofitService))
+        favViewModel = ViewModelProvider(this , favoriteViewModelFactory).get(FavoriteViewModel::class.java)
+
+        val args: MapFragmentArgs by navArgs()
 
         // Initialize the MapView
         mapView = view.findViewById(R.id.mapView)
@@ -61,11 +80,23 @@ class MapFragment : Fragment() {
                 mapView.invalidate()
                 Log.i("TAG", "Map:\nlon: ${geoPoint.longitude}\n${geoPoint.latitude} ")
                 // Send the latitude and longitude to another activity
-                val intent = Intent(activity, MainActivity::class.java).apply {
-                    putExtra("lat", geoPoint.latitude)
-                    putExtra("lon", geoPoint.longitude)
+                if (args.page.isNullOrBlank()) {
+                    val intent = Intent(activity, MainActivity::class.java).apply {
+                        putExtra("lat", geoPoint.latitude)
+                        putExtra("lon", geoPoint.longitude)
+                    }
+                    startActivity(intent)
+                }else if(args.page == "fav"){
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    var city = "Unknown City"
+                    val addresses = geocoder.getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
+                    if (addresses != null && !addresses.isEmpty()) {
+                        val address = addresses[0]
+                        city = address.locality ?: "Unknown City"
+                    }
+                    favViewModel.insertFavWeather(Favorite(geoPoint.longitude , geoPoint.latitude , city))
+                    findNavController().navigate(R.id.action_mapFragment_to_favoriteFragment)
                 }
-                startActivity(intent)
 
                 return true // Event is consumed
             }

@@ -87,14 +87,14 @@ class MainActivity : AppCompatActivity() {
         val lat = intent.getDoubleExtra("lat", 0.0)
         Log.i("TAG", "in MainActivity:\nlon:$lon\nlat$lat")
         // Create a bundle and pass it to HomeFragment
-        val bundle = Bundle().apply {
-            putDouble("lat", lat)  // latitude obtained
+        val bundle = Bundle()/*.apply {
+            putFloat("lat", lat.toFloat())  // latitude obtained
             putDouble("lon", lon)  // longitude obtained
-        }
+        }*/
         val navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(navigationView, navController)
-
-        navController.navigate(R.id.homeFragment, bundle)
+//
+//        navController.navigate(R.id.homeFragment, bundle)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val customView = actionBar?.customView
