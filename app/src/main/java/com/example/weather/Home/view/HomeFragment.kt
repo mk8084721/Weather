@@ -143,7 +143,8 @@ class HomeFragment : Fragment() {
                 }
                 else {
                     viewModel.getHomeWeather()
-                    Log.i("TAG", "its Offline: \nlon : ${args.lon} \nlat : ${args.lat}")
+                    Log.i("TAG", "its Offline: \nlon args : ${args.lon} \nlat args : ${args.lat}")
+                    Log.i("TAG", "its Offline: \nlon : ${lon} \nlat : ${lat}")
                     var todayDate = LocalDate.now()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     lifecycleScope.launch {

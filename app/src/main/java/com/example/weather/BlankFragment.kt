@@ -25,7 +25,7 @@ class BlankFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val action = BlankFragmentDirections.actionBlankFragmentToHomeFragment(-1.0f,-1.0f)
+        val action = BlankFragmentDirections.actionBlankFragmentToHomeFragment()
         findNavController().navigate(action)
     }
 

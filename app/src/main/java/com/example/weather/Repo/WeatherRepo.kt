@@ -2,6 +2,7 @@ package com.example.weather.Repo
 
 import android.content.Context
 import com.example.weather.database.LocalDataSource
+import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
 import com.example.weather.network.model.CurrentWeather
@@ -74,6 +75,13 @@ class WeatherRepo(var localDataSource : LocalDataSource , var remoteDataSource:A
         return Pair(latitude, longitude)
     }
 
+    fun getAlerts() :Flow<List<Alert>>{
+        return localDataSource.getAlerts()
+    }
+
+    suspend fun insertAlert(alert: Alert) {
+        localDataSource.insertAlert(alert)
+    }
 
 
 //    val (latitude, longitude) = getLocationFromPreferences(context)

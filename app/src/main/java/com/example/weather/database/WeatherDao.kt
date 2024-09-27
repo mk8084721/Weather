@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +33,13 @@ interface WeatherDao {
     fun updateFavWeather(favWeather : List<Favorite>)
     @Delete(entity = Favorite::class)
     fun deleteFavWeather(favWeather : List<Favorite>)
+
+    //Alerts
+    @Insert(entity = Alert::class)
+    suspend fun insertAlert(alert: Alert)
+
+    @Query("SELECT * FROM alerts")
+    fun getAllAlerts(): Flow<List<Alert>>
 
 
 }

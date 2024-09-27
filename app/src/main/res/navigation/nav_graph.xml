@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/alertsFragment"
-        android:name="com.example.weather.AlertsFragment"
+        android:name="com.example.weather.Alerts.AlertsFragment"
         android:label="@string/Alerts"
         tools:layout="@layout/fragment_alerts" />
     <fragment
