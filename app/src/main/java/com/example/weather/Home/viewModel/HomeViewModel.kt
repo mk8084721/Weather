@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.model.HomeWeather
+import com.example.weather.database.model.Hourly
 import com.example.weather.network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +19,11 @@ class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
     var currentWeatherSF = MutableStateFlow(ApiState())
     var weatherForecastSF = MutableStateFlow(ApiState())
     var homeWeatherSF = MutableStateFlow<List<HomeWeather>>(emptyList())
+    var hourlyWeatherSF = MutableStateFlow(ApiState())
 
     fun getCurrentWeather(lon:Float , lat:Float){
         viewModelScope.launch {
+            currentWeatherSF.value = ApiState.Loading
             // Calling Current Weather
             repo.getCurrentWeather(lon , lat).flowOn(Dispatchers.IO)
                 .catch {
@@ -33,6 +36,7 @@ class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
                 }
         }
         viewModelScope.launch {
+            weatherForecastSF.value = ApiState.Loading
             //Calling Forcast or Hourly Weather
             repo.getWeatherForecast(lon , lat).flowOn(Dispatchers.IO)
                 .catch {
@@ -78,6 +82,34 @@ class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
     }
     fun getLocationSHP(context: Context): Pair<Float, Float> {
         return repo.getLocationFromPreferences(context)
+    }
+
+    fun clearHourlyTable() {
+        viewModelScope.launch(Dispatchers.IO){
+            repo.clearHourlyTable()
+        }
+    }
+
+    fun insertHourlyWeather(hourlyWeather: MutableList<Hourly>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertHourlyWeather(hourlyWeather)
+        }
+    }
+
+    fun getHourlyWeather() {
+        viewModelScope.launch(Dispatchers.IO){
+            hourlyWeatherSF.value = ApiState.Loading
+            // Calling Current Weather
+            repo.getHourlyWeather().flowOn(Dispatchers.IO)
+                .catch {
+                        e-> currentWeatherSF.value = ApiState.Failure(e)
+                }
+                .collect{
+                        values ->
+                    Log.i("TAG", "getCurrentWeather: $values")
+                    hourlyWeatherSF.value= ApiState.LocalHourlySuccess(values)
+                }
+        }
     }
 
 }

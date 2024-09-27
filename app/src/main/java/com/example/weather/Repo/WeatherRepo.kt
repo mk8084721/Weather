@@ -5,6 +5,7 @@ import com.example.weather.database.LocalDataSource
 import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
+import com.example.weather.database.model.Hourly
 import com.example.weather.network.model.CurrentWeather
 import com.example.weather.network.model.ForecastWeather
 import com.example.weather.network.ApiService
@@ -81,6 +82,18 @@ class WeatherRepo(var localDataSource : LocalDataSource , var remoteDataSource:A
 
     suspend fun insertAlert(alert: Alert) {
         localDataSource.insertAlert(alert)
+    }
+
+    fun clearHourlyTable() {
+        localDataSource.clearHourlyTable()
+    }
+
+    fun insertHourlyWeather(hourlyWeather: MutableList<Hourly>) {
+        localDataSource.insertHourlyWeather(hourlyWeather)
+    }
+
+    fun getHourlyWeather(): Flow<List<Hourly>> {
+        return localDataSource.getHourlyWeather()
     }
 
 

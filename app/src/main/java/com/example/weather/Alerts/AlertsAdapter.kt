@@ -16,6 +16,9 @@ import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.databinding.ItemAlertBinding
 import com.example.weather.databinding.ItemFavoriteBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AlertsAdapter () : ListAdapter<Alert, AlertsAdapter.AlertsViewHolder>(ProductDiffUtilItem()) {
     lateinit var context: Context
@@ -31,7 +34,11 @@ class AlertsAdapter () : ListAdapter<Alert, AlertsAdapter.AlertsViewHolder>(Prod
 
     override fun onBindViewHolder(holder: AlertsViewHolder, position: Int) {
         val currentAlert = getItem(position)
-        holder.binding.alertTitle.text = currentAlert.title
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault()) // Example format: 12:08 PM
+        val timeString = sdf.format(Date(currentAlert.timeInMillis))
+
+        // Set the formatted time string to the TextView
+        holder.binding.alertTitle.text = timeString
         holder.binding.deleteAlert.setOnClickListener{
             //delete item
         }

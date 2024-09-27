@@ -146,14 +146,15 @@ class AlertsFragment : Fragment() {
 
     private fun addAlertToDatabase(timeInMillis: Long) {
 
-        val alert = Alert(title = "XX", timeInMillis = timeInMillis)
+        val alert = Alert(title = "Alert", timeInMillis = timeInMillis)
 
         // Insert alert into Room (use coroutines or background thread)
         lifecycleScope.launch {
             viewModel.insertAlertToDB(alert)
             // Schedule the alarm
-            scheduleAlert(alert)
+//            scheduleAlert(alert)
         }
+        scheduleAlert(alert)
     }
 
 

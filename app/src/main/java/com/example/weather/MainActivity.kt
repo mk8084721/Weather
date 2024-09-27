@@ -86,11 +86,7 @@ class MainActivity : AppCompatActivity() {
         val lon = intent.getDoubleExtra("lon", 0.0)
         val lat = intent.getDoubleExtra("lat", 0.0)
         Log.i("TAG", "in MainActivity:\nlon:$lon\nlat$lat")
-        // Create a bundle and pass it to HomeFragment
-        val bundle = Bundle()/*.apply {
-            putFloat("lat", lat.toFloat())  // latitude obtained
-            putDouble("lon", lon)  // longitude obtained
-        }*/
+
         val navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(navigationView, navController)
 //
@@ -106,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.favoriteFragment -> titleTextView?.text = getString(R.string.Favorite)
                 R.id.alertsFragment -> titleTextView?.text = getString(R.string.Alerts)
                 R.id.settingsFragment -> titleTextView?.text = getString(R.string.Settings)
+                R.id.homeFragment -> titleTextView?.text = getString(R.string.Home)
                 // Add more cases for other fragments
                 else -> titleTextView?.text = "Weather App"
             }

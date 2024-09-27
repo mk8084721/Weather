@@ -9,6 +9,7 @@ import androidx.room.Update
 import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
+import com.example.weather.database.model.Hourly
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -40,6 +41,18 @@ interface WeatherDao {
 
     @Query("SELECT * FROM alerts")
     fun getAllAlerts(): Flow<List<Alert>>
+
+    // Hourly
+    @Query("SELECT * FROM Hourly")
+    fun getHourlyWeather() : Flow<List<Hourly>>
+    @Insert(onConflict = OnConflictStrategy.IGNORE , entity = Hourly::class)
+    fun insertHourlyWeather(favWeather : List<Hourly>)
+    @Update(entity = Hourly::class)
+    fun updateHourlyWeather(favWeather : List<Hourly>)
+    @Delete(entity = Hourly::class)
+    fun deleteHourlyWeather(favWeather : List<Hourly>)
+    @Query("DELETE FROM Hourly")
+    fun clearTable()
 
 
 }

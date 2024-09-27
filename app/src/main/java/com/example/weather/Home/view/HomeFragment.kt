@@ -28,6 +28,12 @@ import com.example.weather.network.ApiState
 import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
 import com.example.weather.MapFragmentArgs
+import com.example.weather.database.model.Hourly
+import com.example.weather.network.model.Coord
+import com.example.weather.network.model.CurrentWeather
+import com.example.weather.network.model.Temp
+import com.example.weather.network.model.WeatherStatus
+import com.example.weather.network.model.Wind
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -81,9 +87,12 @@ class HomeFragment : Fragment() {
                                     result ->
                                 when(result){
                                     is ApiState.Loading ->{
-                                        //
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.homePage.visibility = View.GONE
                                     }
                                     is ApiState.Success ->{
+                                        binding.progressBar.visibility = View.GONE
+                                        binding.homePage.visibility = View.VISIBLE
                                         var currentWeather = result.data
                                         //binding.locationName.text = currentWeather.name
                                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -143,6 +152,7 @@ class HomeFragment : Fragment() {
                 }
                 else {
                     viewModel.getHomeWeather()
+                    viewModel.getHourlyWeather()
                     Log.i("TAG", "its Offline: \nlon args : ${args.lon} \nlat args : ${args.lat}")
                     Log.i("TAG", "its Offline: \nlon : ${lon} \nlat : ${lat}")
                     var todayDate = LocalDate.now()
@@ -153,10 +163,11 @@ class HomeFragment : Fragment() {
                                 if (result.size>0) {
                                     val currentWeather = result.get(0)
                                     if (isConnected(requireContext())) {
-                                        if (currentWeather.date == todayDate) {
+                                        if (currentWeather.date == todayDate && currentWeather.lon==lon &&currentWeather.lat == lat) {
                                             showHomeData(currentWeather)
                                         } else {
                                             viewModel.getCurrentWeather(lon, lat)
+                                            viewModel.clearHourlyTable()
                                         }
                                     } else {
                                         if (currentWeather.lat == 0.0f && currentWeather.lon == 0.0f) {
@@ -164,6 +175,63 @@ class HomeFragment : Fragment() {
                                         } else {
                                             showHomeData(currentWeather)
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    lifecycleScope.launch {
+                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                            viewModel.hourlyWeatherSF.collectLatest{
+                                    result ->
+                                when(result){
+                                    is ApiState.Loading ->{
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.homePage.visibility = View.GONE
+                                    }
+                                    is ApiState.LocalHourlySuccess ->{
+                                        binding.progressBar.visibility = View.GONE
+                                        binding.homePage.visibility = View.VISIBLE
+                                        val hourlyWeather = result.data
+                                        val currentWeatherList = mutableListOf<CurrentWeather>()
+                                        if(hourlyWeather.size>0) {
+                                            binding.dateTxt.text = hourlyWeather.get(0).date
+                                            for (item in hourlyWeather) {
+                                                currentWeatherList.add(
+                                                    CurrentWeather(
+                                                        Coord(0.0f, 0.0f),
+                                                        arrayOf<WeatherStatus>(),
+                                                        "",
+                                                        Temp(
+                                                            item.temp,
+                                                            0.0f,
+                                                            0.0f,
+                                                            0.0f,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ),
+                                                        0,
+                                                        Wind(0.0f, 0, 0.0f),
+                                                        0,
+                                                        0,
+                                                        "",
+                                                        0,
+                                                        "${item.date} ${item.hour}:00"
+                                                    )
+                                                )
+                                            }
+                                            hourlyAdapter.submitList(currentWeatherList)
+                                        }
+
+                                    }
+                                    is ApiState.Failure ->{
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Check Internet",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
                             }
@@ -219,13 +287,27 @@ class HomeFragment : Fragment() {
                                         //
                                     }
                                     is ApiState.ForecastSuccess ->{
-                                        var forecastWeather = result.data
+                                        var forecastWeather = result.data.list
+                                        var hourlyWeather = mutableListOf<Hourly>()
+                                        for (item in forecastWeather){
+                                            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                            val localDateTime = LocalDateTime.parse(item.dt_txt, formatter)
+                                            hourlyWeather.add(
+                                                Hourly(
+                                                    localDateTime.toLocalTime().toString(),
+                                                    localDateTime.toLocalDate().toString(),
+                                                    item.main.temp
+                                                )
+                                            )
+                                        }
+                                        viewModel.insertHourlyWeather(hourlyWeather)
+                                        /*///////////////////////////////////////////////////
 
                                         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                        val localDateTime = LocalDateTime.parse(forecastWeather.list[0].dt_txt, formatter)
+                                        val localDateTime = LocalDateTime.parse(forecastWeather[0].dt_txt, formatter)
                                         binding.dateTxt.text = localDateTime.toLocalDate().toString()
                                         //send data to the adabter
-                                        hourlyAdapter.submitList(forecastWeather.list.toMutableList())
+                                        hourlyAdapter.submitList(forecastWeather.toMutableList())*/
 
                                     }
                                     is ApiState.Failure ->{

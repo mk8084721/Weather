@@ -1,9 +1,14 @@
 package com.example.weather.database
 
 import android.content.Context
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Update
 import com.example.weather.database.model.Alert
 import com.example.weather.database.model.Favorite
 import com.example.weather.database.model.HomeWeather
+import com.example.weather.database.model.Hourly
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(var context: Context) {
@@ -47,5 +52,22 @@ class LocalDataSource(var context: Context) {
 
     suspend fun insertAlert(alert: Alert) {
         dao.insertAlert(alert)
+    }
+
+    //Hourly
+    fun getHourlyWeather() : Flow<List<Hourly>>{
+        return dao.getHourlyWeather()
+    }
+    fun insertHourlyWeather(hourlyWeather : List<Hourly>){
+        dao.insertHourlyWeather(hourlyWeather)
+    }
+    fun updateHourlyWeather(hourlyWeather : List<Hourly>){
+        dao.updateHourlyWeather(hourlyWeather)
+    }
+    fun deleteHourlyWeather(hourlyWeather : List<Hourly>){
+        dao.deleteHourlyWeather(hourlyWeather)
+    }
+    fun clearHourlyTable(){
+        dao.clearTable()
     }
 }
