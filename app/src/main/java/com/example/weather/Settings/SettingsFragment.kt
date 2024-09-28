@@ -33,11 +33,14 @@ class SettingsFragment : Fragment() {
     private lateinit var languageSwitch: Switch
     private lateinit var modeRadioGroup: RadioGroup
     private lateinit var unitRadioGroup: RadioGroup
+    private lateinit var mile_radio_group: RadioGroup
     private lateinit var radioMap: RadioButton
     private lateinit var radioGps: RadioButton
     private lateinit var radioCelsius: RadioButton
     private lateinit var radioKelvin: RadioButton
     private lateinit var radioFahrenheit: RadioButton
+    private lateinit var radioMeter: RadioButton
+    private lateinit var radioMile: RadioButton
     private lateinit var fusedClient : FusedLocationProviderClient
 
     override fun onCreateView(
@@ -59,6 +62,9 @@ class SettingsFragment : Fragment() {
         radioCelsius = view.findViewById(R.id.cel)
         radioKelvin = view.findViewById(R.id.kel)
         radioFahrenheit = view.findViewById(R.id.feh)
+        mile_radio_group = view.findViewById(R.id.mile_radio_group)
+        radioMeter = view.findViewById(R.id.meter)
+        radioMile = view.findViewById(R.id.mile)
 
         // Load the current language setting
         val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
@@ -68,6 +74,7 @@ class SettingsFragment : Fragment() {
         // Load the selected mode
         checkSelectMode()
         checkSelectedUnit()
+        checkSelectedSpeed()
         languageSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 changeLanguage("ar")
@@ -87,6 +94,16 @@ class SettingsFragment : Fragment() {
                 unit = "f"
             }
             sharedPreferences.edit().putString("unit", unit).apply()
+            requireActivity().recreate()
+        }
+        mile_radio_group.setOnCheckedChangeListener { group, checkedId ->
+            var speed : String
+            if (checkedId == R.id.meter) {
+                speed = "mt"
+            }else {
+                speed = "mi"
+            }
+            sharedPreferences.edit().putString("speed", speed).apply()
             requireActivity().recreate()
         }
         modeRadioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -112,6 +129,17 @@ class SettingsFragment : Fragment() {
 
         }
     }
+
+    private fun checkSelectedSpeed() {
+        val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val selectedMode = sharedPreferences.getString("speed", "mt") // Default to Map
+        if (selectedMode == "mt") {
+            radioMeter.isChecked = true
+        } else {
+            radioMile.isChecked = true
+        }
+    }
+
     fun checkSelectMode(){
         val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         val selectedMode = sharedPreferences.getString("mode", "Map") // Default to Map

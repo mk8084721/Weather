@@ -39,4 +39,6 @@
     <string name="kelvin">Kelvin</string>
     <string name="fahrenheit">Fahrenheit</string>
     <string name="units">Units</string>
+    <string name="meter">meter/s</string>
+    <string name="mile">mile/s</string>
 </resources>

@@ -68,7 +68,7 @@ class WeatherRepo( var localDataSource : ILocalDataSource,  var remoteDataSource
     override fun getDefaultSettings(context: Context): List<String?> {
         val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         val lang = sharedPreferences.getString("lang","en")
-        val speed = sharedPreferences.getString("speed", "m/s")
+        val speed = sharedPreferences.getString("speed", "mt")
         val unit = sharedPreferences.getString("unit", "c")
         return listOf(lang,speed,unit)
     }

@@ -35,4 +35,11 @@
     <string name="weather_snow_night">ثلوج (ليلاً)</string>
     <string name="weather_mist_day">ضباب</string>
     <string name="weather_mist_night">ضباب (ليلاً)</string>
+    <string name="SelectMode">اختر الوضع</string>
+    <string name="Celisus">سيلزيوس</string>
+    <string name="kelvin">كلفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="units">الوحدات</string>
+    <string name="meter">متر/ث</string>
+    <string name="mile">ميل/ث</string>
 </resources>

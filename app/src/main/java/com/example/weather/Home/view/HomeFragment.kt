@@ -27,6 +27,7 @@ import com.example.weather.network.API
 import com.example.weather.network.ApiState
 import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
+import com.example.weather.R
 import com.example.weather.database.model.Hourly
 import com.example.weather.network.model.Clouds
 import com.example.weather.network.model.Coord
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
                                         binding.weatherCondition.text = WeatherType.fromWeatherID(currentWeather.weather.get(0).icon , requireContext()).weatherDesc
                                         binding.humidity.text = currentWeather.main.humidity.toString()
                                         binding.pressure.text = currentWeather.main.pressure.toString()
-                                        binding.wind.text = "${currentWeather.wind.speed} m / s"
+                                        binding.wind.text = getSpeed(currentWeather.wind.speed)
                                         binding.clouds.text = currentWeather.clouds.all.toString()
                                     }
                                     is ApiState.Failure->{
@@ -356,7 +357,7 @@ class HomeFragment : Fragment() {
         binding.weatherCondition.text = currentWeather.weatherConditionEn
         binding.humidity.text = currentWeather.humidity.toString()
         binding.pressure.text = currentWeather.pressure.toString()
-        binding.wind.text = currentWeather.windSpeed.toString()
+        binding.wind.text = getSpeed(currentWeather.windSpeed)
         binding.clouds.text = currentWeather.clouds.toString()
     }
 
@@ -374,6 +375,16 @@ class HomeFragment : Fragment() {
             return "$weatherTemp"
         }
     }
+    private fun getSpeed(speed: Float): String {
+        val sharedPreferences = requireContext().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val unit = sharedPreferences.getString("speed", "mt")
+        if (unit=="mi"){
+            return ("${ String.format("%.2f", speed * 2.237) } ${getString(R.string.mile)}")
+        }else{
+            return "$speed ${getString(R.string.meter)}"
+        }
+    }
+
 
     fun isConnected(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
