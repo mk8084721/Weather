@@ -31,4 +31,5 @@ interface IWeatherRepo {
     fun insertDefaultSettings(context: Context)
     fun getDefaultSettings(context: Context): List<String?>
     fun getLangFromPreferences(context: Context): String?
+    fun deleteAlert(alert: Alert)
 }

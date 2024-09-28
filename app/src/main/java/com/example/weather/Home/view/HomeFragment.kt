@@ -103,7 +103,7 @@ class HomeFragment : Fragment() {
                                         //todo get current date
 //                                    binding.dateTxt.text = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                                         binding.weatherCondition.text = currentWeather.weather.get(0).description
-                                        binding.tempValue.text = currentWeather.main.temp.toString()
+                                        binding.tempValue.text = getTemp(currentWeather.main.temp)
                                         binding.weatherImage.setImageResource(WeatherType.fromWeatherID(currentWeather.weather.get(0).icon , requireContext()).iconRes)
                                         binding.weatherCondition.text = WeatherType.fromWeatherID(currentWeather.weather.get(0).icon , requireContext()).weatherDesc
                                         binding.humidity.text = currentWeather.main.humidity.toString()
@@ -352,13 +352,29 @@ class HomeFragment : Fragment() {
     fun showHomeData(currentWeather: HomeWeather){
         binding.dateTxt.text = currentWeather.date
         binding.locationName.text = currentWeather.locationName
-        binding.tempValue.text = currentWeather.weatherTemp.toString()
+        binding.tempValue.text = getTemp(currentWeather.weatherTemp)
         binding.weatherCondition.text = currentWeather.weatherConditionEn
         binding.humidity.text = currentWeather.humidity.toString()
         binding.pressure.text = currentWeather.pressure.toString()
         binding.wind.text = currentWeather.windSpeed.toString()
         binding.clouds.text = currentWeather.clouds.toString()
     }
+
+    private fun getTemp(weatherTemp: Float): String {
+        val sharedPreferences = requireContext().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val unit = sharedPreferences.getString("unit", "c")
+        if (unit=="k"){
+            binding.tempUnit.text = "K"
+            return String.format("%.2f", weatherTemp+273.15)
+        }else if (unit=="f"){
+            binding.tempUnit.text = "F"
+            return String.format("%.2f", weatherTemp* 1.8 + 32)
+        }else{
+            binding.tempUnit.text = "C"
+            return "$weatherTemp"
+        }
+    }
+
     fun isConnected(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)

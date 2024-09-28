@@ -1,4 +1,4 @@
-package com.example.weather.Alerts
+package com.example.weather.Alerts.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AlertsAdapter () : ListAdapter<Alert, AlertsAdapter.AlertsViewHolder>(ProductDiffUtilItem()) {
+class AlertsAdapter (var Iview : ICommunicate) : ListAdapter<Alert, AlertsAdapter.AlertsViewHolder>(ProductDiffUtilItem()) {
     lateinit var context: Context
     lateinit var binding : ItemAlertBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlertsViewHolder {
@@ -32,7 +32,7 @@ class AlertsAdapter () : ListAdapter<Alert, AlertsAdapter.AlertsViewHolder>(Prod
         // Set the formatted time string to the TextView
         holder.binding.alertTitle.text = timeString
         holder.binding.deleteAlert.setOnClickListener{
-            //delete item
+            Iview.deleteAlert(currentAlert)
         }
     }
 

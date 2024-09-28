@@ -1,4 +1,4 @@
-package com.example.weather.Alerts
+package com.example.weather.Alerts.view
 
 import android.app.AlarmManager
 import android.app.DatePickerDialog
@@ -25,6 +25,9 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.weather.Alerts.AlertReceiver
+import com.example.weather.Alerts.viewModel.AlertViewModelFactory
+import com.example.weather.Alerts.viewModel.AlertsViewModel
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.LocalDataSource
 import com.example.weather.network.API
@@ -32,7 +35,7 @@ import com.example.weather.network.ApiState
 import kotlinx.coroutines.flow.collectLatest
 
 
-class AlertsFragment : Fragment() {
+class AlertsFragment : Fragment(), ICommunicate{
     lateinit var binding: FragmentAlertsBinding
     lateinit var viewModel : AlertsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +91,7 @@ class AlertsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createNotificationChannel(requireContext())
-        val alertsAdapter = AlertsAdapter()
+        val alertsAdapter = AlertsAdapter(this)
         binding.alertsRecyclerView.apply {
             adapter = alertsAdapter
             layoutManager =
@@ -187,6 +190,33 @@ class AlertsFragment : Fragment() {
         }
 
     }
+    override fun deleteAlert(alert: Alert) {
+        removeAlert(alert)
+    }
+
+    private fun removeAlert(alert: Alert) {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Create the same Intent and PendingIntent used to schedule the alert
+        val intent = Intent(requireContext(), AlertReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            alert.id, // Use the same unique ID for this alert
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Cancel the scheduled alarm
+        alarmManager.cancel(pendingIntent)
+
+        // Remove the alert from the database
+        lifecycleScope.launch {
+            viewModel.deleteAlertFromDB(alert)
+            Toast.makeText(requireContext(), "Alert removed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
 
 }

@@ -32,7 +32,7 @@ class HourlyWeatherAdapter() :
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val localDateTime = LocalDateTime.parse(currentHourWeather.dt_txt, formatter)
         holder.binding.hourTxt.text = localDateTime.toLocalTime().toString()
-        holder.binding.hourTemp.text = currentHourWeather.main.temp.toString()
+        holder.binding.hourTemp.text = getTemp(currentHourWeather.main.temp)
 
     }
 
@@ -48,5 +48,16 @@ class HourlyWeatherAdapter() :
             return oldItem == newItem
         }
 
+    }
+    private fun getTemp(weatherTemp: Float): String {
+        val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val unit = sharedPreferences.getString("unit", "c")
+        if (unit=="k"){
+            return String.format("%.2f", weatherTemp+273.15)
+        }else if (unit=="f"){
+            return String.format("%.2f", weatherTemp* 1.8 + 32)
+        }else{
+            return "$weatherTemp"
+        }
     }
 }

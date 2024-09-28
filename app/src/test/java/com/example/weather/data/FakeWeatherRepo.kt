@@ -105,4 +105,16 @@ class FakeWeatherRepo() : IWeatherRepo {
     override fun getHourlyWeather(): Flow<List<Hourly>>  = flow {
         emit(hourlyWeatherList)
     }
+
+    override fun insertDefaultSettings(context: Context) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getDefaultSettings(context: Context): List<String?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLangFromPreferences(context: Context): String? {
+        TODO("Not yet implemented")
+    }
 }

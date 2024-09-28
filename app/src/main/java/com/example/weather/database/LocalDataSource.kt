@@ -70,4 +70,8 @@ class LocalDataSource(override var context: Context) : ILocalDataSource {
     override fun clearHourlyTable(){
         dao.clearTable()
     }
+
+    override fun deleteAlert(alert: Alert) {
+        dao.deleteAlert(alert)
+    }
 }

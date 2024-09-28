@@ -1,4 +1,4 @@
-package com.example.weather
+package com.example.weather.Settings
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,12 +20,11 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.Toast
-import androidx.compose.material3.Switch
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
 import java.util.Locale
 import androidx.navigation.fragment.findNavController
+import com.example.weather.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -33,8 +32,12 @@ class SettingsFragment : Fragment() {
 
     private lateinit var languageSwitch: Switch
     private lateinit var modeRadioGroup: RadioGroup
+    private lateinit var unitRadioGroup: RadioGroup
     private lateinit var radioMap: RadioButton
     private lateinit var radioGps: RadioButton
+    private lateinit var radioCelsius: RadioButton
+    private lateinit var radioKelvin: RadioButton
+    private lateinit var radioFahrenheit: RadioButton
     private lateinit var fusedClient : FusedLocationProviderClient
 
     override fun onCreateView(
@@ -52,6 +55,10 @@ class SettingsFragment : Fragment() {
         modeRadioGroup = view.findViewById(R.id.mode_radio_group)
         radioMap = view.findViewById(R.id.radio_map)
         radioGps = view.findViewById(R.id.radio_gps)
+        unitRadioGroup = view.findViewById(R.id.unit_radio_group)
+        radioCelsius = view.findViewById(R.id.cel)
+        radioKelvin = view.findViewById(R.id.kel)
+        radioFahrenheit = view.findViewById(R.id.feh)
 
         // Load the current language setting
         val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
@@ -60,7 +67,7 @@ class SettingsFragment : Fragment() {
 
         // Load the selected mode
         checkSelectMode()
-
+        checkSelectedUnit()
         languageSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 changeLanguage("ar")
@@ -70,7 +77,18 @@ class SettingsFragment : Fragment() {
                 languageSwitch.text = "العربية" // Change switch text to Arabic
             }
         }
-
+        unitRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            var unit : String
+            if (checkedId == R.id.cel) {
+                unit = "c"
+            }else if (checkedId == R.id.kel) {
+                unit = "k"
+            } else {
+                unit = "f"
+            }
+            sharedPreferences.edit().putString("unit", unit).apply()
+            requireActivity().recreate()
+        }
         modeRadioGroup.setOnCheckedChangeListener { group, checkedId ->
 
             if (isConnected(requireContext())) {
@@ -101,6 +119,17 @@ class SettingsFragment : Fragment() {
             radioMap.isChecked = true
         } else {
             radioGps.isChecked = true
+        }
+    }
+    fun checkSelectedUnit(){
+        val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val selectedMode = sharedPreferences.getString("unit", "c") // Default to Map
+        if (selectedMode == "c") {
+            radioCelsius.isChecked = true
+        } else if(selectedMode == "k"){
+            radioKelvin.isChecked = true
+        }else{
+            radioFahrenheit.isChecked = true
         }
     }
 

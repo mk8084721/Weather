@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.example.weather.data.FakeWeatherRepo
 import com.example.weather.database.model.HomeWeather
 import com.example.weather.network.ApiState
+import com.example.weather.network.model.Clouds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -43,7 +44,8 @@ class HomeViewModelTest {
                 "",
             "",
             "",
-            0.0f,0.0f,""
+            0.0f,0.0f,"",
+            0,0,0.0f,0
             )
 
         viewModel.insertEmptyHomeWeather(homeWeather)

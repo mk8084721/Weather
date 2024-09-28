@@ -1,6 +1,5 @@
-package com.example.weather.Alerts
+package com.example.weather.Alerts.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weather.Repo.WeatherRepo
@@ -31,6 +30,12 @@ class AlertsViewModel(var repo : WeatherRepo) : ViewModel() {
     fun insertAlertToDB(alert : Alert){
         viewModelScope.launch(Dispatchers.IO){
             repo.insertAlert(alert)
+        }
+    }
+
+    fun deleteAlertFromDB(alert: Alert) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteAlert(alert)
         }
     }
 }

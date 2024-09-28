@@ -35,4 +35,8 @@
     <string name="weather_mist_day">mist</string>
     <string name="weather_mist_night">mist (night)</string>
     <string name="SelectMode">Select Mode</string>
+    <string name="Celisus">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="units">Units</string>
 </resources>

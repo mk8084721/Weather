@@ -86,6 +86,10 @@ class WeatherRepo( var localDataSource : ILocalDataSource,  var remoteDataSource
         return lang
     }
 
+    override fun deleteAlert(alert: Alert) {
+        localDataSource.deleteAlert(alert)
+    }
+
     fun saveSpeedToPreferences(context: Context, speed: String) {
         val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()

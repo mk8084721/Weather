@@ -41,6 +41,9 @@ interface WeatherDao {
 
     @Query("SELECT * FROM alerts")
     fun getAllAlerts(): Flow<List<Alert>>
+    @Delete(entity = Alert::class)
+    fun deleteAlert(alert : Alert)
+
 
     // Hourly
     @Query("SELECT * FROM Hourly")

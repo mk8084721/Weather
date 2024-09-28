@@ -18,7 +18,7 @@ class AlertReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         // Play the custom sound
-        playAlarmSound(context)
+        //playAlarmSound(context)
 
         // Show the notification
         showNotification(context, "Alarm", "It's time for your alert!")

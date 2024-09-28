@@ -28,4 +28,5 @@ interface ILocalDataSource {
     fun updateHourlyWeather(hourlyWeather: List<Hourly>)
     fun deleteHourlyWeather(hourlyWeather: List<Hourly>)
     fun clearHourlyTable()
+    fun deleteAlert(alert: Alert)
 }
