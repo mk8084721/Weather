@@ -15,5 +15,9 @@ data class HomeWeather (
     var weatherConditionAr : String,
     var weatherTemp : Float,
     var hourTemp : Float,
-    var hour : String
+    var hour : String,
+    var pressure : Int,
+    var humidity : Int,
+    var windSpeed : Float,
+    var clouds : Int
 )

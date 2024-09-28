@@ -1,18 +1,16 @@
-package com.example.weather.Favorite
+package com.example.weather.Favorite.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weather.Repo.WeatherRepo
+import com.example.weather.Repo.IWeatherRepo
 import com.example.weather.database.model.Favorite
-import com.example.weather.database.model.HomeWeather
-import com.example.weather.network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class FavoriteViewModel(var repo : WeatherRepo) : ViewModel(){
+class FavoriteViewModel(var repo : IWeatherRepo) : ViewModel(){
     var allFavoriteWeatherSF = MutableStateFlow<List<Favorite>>(emptyList())
 
     fun getAllFavWeather(){

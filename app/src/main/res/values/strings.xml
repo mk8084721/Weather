@@ -13,4 +13,25 @@
     <string name="Home">Home</string>
     <string name="Weather">Weather</string>
     <string name="API_WEATHER_KEY">806997291266b80b0594146105e26982</string>
+    <string name="SelectLanguage">Select Language</string>
+    <string name="English">English</string>
+
+    <string name="weather_clear_sky_day">clear sky</string>
+    <string name="weather_clear_sky_night">clear sky (night)</string>
+    <string name="weather_few_clouds_day">few clouds</string>
+    <string name="weather_few_clouds_night">few clouds (night)</string>
+    <string name="weather_scattered_clouds_day">scattered clouds</string>
+    <string name="weather_scattered_clouds_night">scattered clouds (night)</string>
+    <string name="weather_broken_clouds_day">broken clouds</string>
+    <string name="weather_broken_clouds_night">broken clouds (night)</string>
+    <string name="weather_shower_rain_day">shower rain</string>
+    <string name="weather_shower_rain_night">shower rain (night)</string>
+    <string name="weather_rain_day">rain</string>
+    <string name="weather_rain_night">rain (night)</string>
+    <string name="weather_thunderstorm_day">thunderstorm</string>
+    <string name="weather_thunderstorm_night">thunderstorm (night)</string>
+    <string name="weather_snow_day">snow</string>
+    <string name="weather_snow_night">snow (night)</string>
+    <string name="weather_mist_day">mist</string>
+    <string name="weather_mist_night">mist (night)</string>
 </resources>

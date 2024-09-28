@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.weather.Favorite.FavoriteFragment"
+        android:name="com.example.weather.Favorite.view.FavoriteFragment"
         android:label="@string/Favorite"
         tools:layout="@layout/fragment_favorite" >
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/blankFragment"
-        android:name="com.example.weather.BlankFragment"
+        android:name="com.example.weather.Home.view.BlankFragment"
         android:label="fragment_blank"
         tools:layout="@layout/fragment_blank" >
         <action

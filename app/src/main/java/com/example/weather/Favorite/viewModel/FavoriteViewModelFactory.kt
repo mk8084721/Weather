@@ -1,4 +1,4 @@
-package com.example.weather.Favorite
+package com.example.weather.Favorite.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

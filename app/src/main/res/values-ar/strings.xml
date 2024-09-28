@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">الطقس</string>
+    <string name="InitialSetup">الإعداد الأولي</string>
+    <string name="location">الموقع</string>
+    <string name="notification">الإشعارات</string>
+    <string name="GPS">نظام تحديد المواقع</string>
+    <string name="Map">الخريطة</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">مرحبًا بك في هذا الجزء الفارغ</string>
+    <string name="Settings">الإعدادات</string>
+    <string name="Alerts">التنبيهات</string>
+    <string name="Favorite">المفضلة</string>
+    <string name="Home">الرئيسية</string>
+    <string name="Weather">الطقس</string>
+    <string name="API_WEATHER_KEY">806997291266b80b0594146105e26982</string>
+
+    <string name="SelectLanguage">اختر اللغه</string>
+    <string name="English">العربيه</string>
+
+    <string name="weather_clear_sky_day">سماء صافية</string>
+    <string name="weather_clear_sky_night">سماء صافية (ليلاً)</string>
+    <string name="weather_few_clouds_day">غيوم قليلة</string>
+    <string name="weather_few_clouds_night">غيوم قليلة (ليلاً)</string>
+    <string name="weather_scattered_clouds_day">غيوم متفرقة</string>
+    <string name="weather_scattered_clouds_night">غيوم متفرقة (ليلاً)</string>
+    <string name="weather_broken_clouds_day">غيوم متكسرة</string>
+    <string name="weather_broken_clouds_night">غيوم متكسرة (ليلاً)</string>
+    <string name="weather_shower_rain_day">أمطار غزيرة</string>
+    <string name="weather_shower_rain_night">أمطار غزيرة (ليلاً)</string>
+    <string name="weather_rain_day">مطر</string>
+    <string name="weather_rain_night">مطر (ليلاً)</string>
+    <string name="weather_thunderstorm_day">عاصفة رعدية</string>
+    <string name="weather_thunderstorm_night">عاصفة رعدية (ليلاً)</string>
+    <string name="weather_snow_day">ثلوج</string>
+    <string name="weather_snow_night">ثلوج (ليلاً)</string>
+    <string name="weather_mist_day">ضباب</string>
+    <string name="weather_mist_night">ضباب (ليلاً)</string>
+</resources>

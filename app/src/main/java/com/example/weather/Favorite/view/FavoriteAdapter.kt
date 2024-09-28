@@ -1,23 +1,20 @@
-package com.example.weather.Favorite
+package com.example.weather.Favorite.view
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.example.weather.Favorite.viewModel.FavoriteViewModel
 import com.example.weather.R
 import com.example.weather.database.model.Favorite
 import com.example.weather.databinding.ItemFavoriteBinding
-import java.net.MalformedURLException
-import java.net.URL
 
-class FavoriteAdapter(var viewModel: FavoriteViewModel , var fragment: FavoriteFragment) : ListAdapter<Favorite, FavoriteAdapter.FavoriteViewHolder>(ProductDiffUtilItem()) {
+class FavoriteAdapter(var viewModel: FavoriteViewModel, var fragment: FavoriteFragment) : ListAdapter<Favorite, FavoriteAdapter.FavoriteViewHolder>(
+    ProductDiffUtilItem()
+) {
         lateinit var context: Context
         lateinit var binding : ItemFavoriteBinding
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {

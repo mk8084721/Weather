@@ -11,15 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.weather.Favorite.FavoriteViewModel
-import com.example.weather.Favorite.FavoriteViewModelFactory
-import com.example.weather.Home.viewModel.HomeViewModel
-import com.example.weather.Home.viewModel.HomeViewModelFactory
+import com.example.weather.Favorite.viewModel.FavoriteViewModel
+import com.example.weather.Favorite.viewModel.FavoriteViewModelFactory
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.LocalDataSource
 import com.example.weather.database.model.Favorite
 import com.example.weather.network.API
-import kotlinx.coroutines.NonCancellable.equals
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint

@@ -1,6 +1,5 @@
 package com.example.weather.Alerts
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.PendingIntent
@@ -16,29 +15,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weather.R
-import com.example.weather.database.WeatherDB
 import com.example.weather.database.model.Alert
 import com.example.weather.databinding.FragmentAlertsBinding
-import com.example.weather.databinding.FragmentFavoriteBinding
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.location.Geocoder
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.weather.AlarmAlertActivity
-import com.example.weather.Favorite.FavoriteViewModel
-import com.example.weather.Favorite.FavoriteViewModelFactory
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.LocalDataSource
 import com.example.weather.network.API
 import com.example.weather.network.ApiState
 import kotlinx.coroutines.flow.collectLatest
-import java.util.Locale
 
 
 class AlertsFragment : Fragment() {

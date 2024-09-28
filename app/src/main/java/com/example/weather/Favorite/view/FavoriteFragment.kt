@@ -1,4 +1,4 @@
-package com.example.weather.Favorite
+package com.example.weather.Favorite.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weather.R
+import com.example.weather.Favorite.viewModel.FavoriteViewModel
+import com.example.weather.Favorite.viewModel.FavoriteViewModelFactory
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.LocalDataSource
-import com.example.weather.database.WeatherDB
 import com.example.weather.databinding.FragmentFavoriteBinding
 import com.example.weather.network.API
 import kotlinx.coroutines.launch

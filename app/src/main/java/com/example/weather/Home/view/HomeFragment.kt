@@ -27,14 +27,13 @@ import com.example.weather.network.API
 import com.example.weather.network.ApiState
 import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
-import com.example.weather.MapFragmentArgs
 import com.example.weather.database.model.Hourly
+import com.example.weather.network.model.Clouds
 import com.example.weather.network.model.Coord
 import com.example.weather.network.model.CurrentWeather
 import com.example.weather.network.model.Temp
 import com.example.weather.network.model.WeatherStatus
 import com.example.weather.network.model.Wind
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -106,8 +105,12 @@ class HomeFragment : Fragment() {
 //                                    binding.dateTxt.text = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                                         binding.weatherCondition.text = currentWeather.weather.get(0).description
                                         binding.tempValue.text = currentWeather.main.temp.toString()
-                                        //todo Weather Image
-                                        //binding.weatherImage
+                                        binding.weatherImage.setImageResource(WeatherType.fromWeatherID(currentWeather.weather.get(0).icon , requireContext()).iconRes)
+                                        binding.weatherCondition.text = WeatherType.fromWeatherID(currentWeather.weather.get(0).icon , requireContext()).weatherDesc
+                                        binding.humidity.text = currentWeather.main.humidity.toString()
+                                        binding.pressure.text = currentWeather.main.pressure.toString()
+                                        binding.wind.text = "${currentWeather.wind.speed} m / s"
+                                        binding.clouds.text = currentWeather.clouds.all.toString()
                                     }
                                     is ApiState.Failure->{
                                         Toast.makeText(
@@ -218,7 +221,8 @@ class HomeFragment : Fragment() {
                                                         0,
                                                         "",
                                                         0,
-                                                        "${item.date} ${item.hour}:00"
+                                                        "${item.date} ${item.hour}:00",
+                                                        Clouds(0)
                                                     )
                                                 )
                                             }
@@ -264,7 +268,11 @@ class HomeFragment : Fragment() {
                                             "",
                                             currentWeather.main.temp,
                                             0.0f,
-                                            ""
+                                            "",
+                                            currentWeather.main.pressure,
+                                            currentWeather.main.humidity,
+                                            currentWeather.wind.speed,
+                                            currentWeather.clouds.all
                                         ))
                                     }
                                     is ApiState.Failure->{
@@ -336,6 +344,10 @@ class HomeFragment : Fragment() {
         binding.locationName.text = currentWeather.locationName
         binding.tempValue.text = currentWeather.weatherTemp.toString()
         binding.weatherCondition.text = currentWeather.weatherConditionEn
+        binding.humidity.text = currentWeather.humidity.toString()
+        binding.pressure.text = currentWeather.pressure.toString()
+        binding.wind.text = currentWeather.windSpeed.toString()
+        binding.clouds.text = currentWeather.clouds.toString()
     }
     fun isConnected(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

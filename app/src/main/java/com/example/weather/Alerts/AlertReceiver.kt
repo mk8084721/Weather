@@ -45,7 +45,7 @@ class AlertReceiver : BroadcastReceiver() {
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true) // Auto dismisses the notification when clicked
+            .setAutoCancel(false) // Auto dismisses the notification when clicked
             .addAction(R.drawable.ic_wind, "Dismiss", dismissPendingIntent) // Add the dismiss button
 
         // Show the notification

@@ -29,6 +29,7 @@ import com.example.weather.Home.viewModel.HomeViewModel
 import com.example.weather.Home.viewModel.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.util.Locale
 
 class InitialSetupActivity : AppCompatActivity() {
     lateinit var binding: ActivityInitialSetupBinding
@@ -54,10 +55,16 @@ class InitialSetupActivity : AppCompatActivity() {
 
         if (isFirstTime(this)) {
             Log.i("TAG", "onCreate: Alert")
-            viewModel.insertEmptyHomeWeather(HomeWeather(1,0.0f,0.0f,"","","","",0.0f,0.0f,""))
+            viewModel.insertEmptyHomeWeather(HomeWeather(1,0.0f,0.0f,"","","","",0.0f,0.0f,"",0,0,0.0f,0))
+            viewModel.insertDefaultSettings(this)
             showFirstTimeCustomAlert()
             setFirstTimeFlag(this, false)
         }else{
+            val lang =viewModel.getLangSHP(this)
+            val config = resources.configuration
+            config.setLocale(lang?.let { Locale(it) })
+            resources.updateConfiguration(config, resources.displayMetrics)
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

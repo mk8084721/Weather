@@ -11,8 +11,11 @@ data class CurrentWeather(
     var timezone : Int,
     var name : String,
     var cod : Int,
-    var dt_txt: String
+    var dt_txt: String,
+    var clouds : Clouds
 )
+
+data class Clouds(var all : Int)
 data class ForecastWeather( var list: Array<CurrentWeather> )
 data class Coord(var longitude: Float , var latitude: Float)
 data class Wind(

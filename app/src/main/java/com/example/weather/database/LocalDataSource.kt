@@ -11,63 +11,63 @@ import com.example.weather.database.model.HomeWeather
 import com.example.weather.database.model.Hourly
 import kotlinx.coroutines.flow.Flow
 
-class LocalDataSource(var context: Context) {
+class LocalDataSource(override var context: Context) : ILocalDataSource {
     var dao = WeatherDB.getInstance(context).getWeatherDao()
 
-    fun getHomeWeather(): Flow<List<HomeWeather>> {
+    override fun getHomeWeather(): Flow<List<HomeWeather>> {
         return dao.getHomeWeather()
     }
 
-    suspend fun insertHomeWeather(homeWeather: List<HomeWeather>) {
+    override suspend fun insertHomeWeather(homeWeather: List<HomeWeather>) {
         dao.insertHomeWeather(homeWeather)
     }
 
-    fun updateHomeWeather(homeWeather: List<HomeWeather>) {
+    override fun updateHomeWeather(homeWeather: List<HomeWeather>) {
         dao.updateHomeWeather(homeWeather)
     }
 
-    fun deleteHomeWeather(homeWeather: List<HomeWeather>) {
+    override fun deleteHomeWeather(homeWeather: List<HomeWeather>) {
         dao.deleteHomeWeather(homeWeather)
     }
 
-    fun getAllFavWeather(): Flow<List<Favorite>> {
+    override fun getAllFavWeather(): Flow<List<Favorite>> {
         return dao.getAllFavWeather()
     }
 
-    fun insertFavWeather(favWeather: List<Favorite>) {
+    override fun insertFavWeather(favWeather: List<Favorite>) {
         dao.insertFavWeather(favWeather)
     }
 
-    fun updateFavWeather(favWeather: List<Favorite>) {
+    override fun updateFavWeather(favWeather: List<Favorite>) {
         dao.updateFavWeather(favWeather)
     }
 
-    fun deleteFavWeather(favWeather: List<Favorite>) {
+    override fun deleteFavWeather(favWeather: List<Favorite>) {
         dao.deleteFavWeather(favWeather)
     }
 
-    fun getAlerts(): Flow<List<Alert>> {
+    override fun getAlerts(): Flow<List<Alert>> {
         return dao.getAllAlerts()
     }
 
-    suspend fun insertAlert(alert: Alert) {
+    override suspend fun insertAlert(alert: Alert) {
         dao.insertAlert(alert)
     }
 
     //Hourly
-    fun getHourlyWeather() : Flow<List<Hourly>>{
+    override fun getHourlyWeather() : Flow<List<Hourly>>{
         return dao.getHourlyWeather()
     }
-    fun insertHourlyWeather(hourlyWeather : List<Hourly>){
+    override fun insertHourlyWeather(hourlyWeather : List<Hourly>){
         dao.insertHourlyWeather(hourlyWeather)
     }
-    fun updateHourlyWeather(hourlyWeather : List<Hourly>){
+    override fun updateHourlyWeather(hourlyWeather : List<Hourly>){
         dao.updateHourlyWeather(hourlyWeather)
     }
-    fun deleteHourlyWeather(hourlyWeather : List<Hourly>){
+    override fun deleteHourlyWeather(hourlyWeather : List<Hourly>){
         dao.deleteHourlyWeather(hourlyWeather)
     }
-    fun clearHourlyTable(){
+    override fun clearHourlyTable(){
         dao.clearTable()
     }
 }

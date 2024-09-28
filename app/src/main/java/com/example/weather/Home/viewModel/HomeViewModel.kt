@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weather.Repo.IWeatherRepo
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.model.HomeWeather
 import com.example.weather.database.model.Hourly
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
+class HomeViewModel(var repo :IWeatherRepo) : ViewModel(){
 
     var currentWeatherSF = MutableStateFlow(ApiState())
     var weatherForecastSF = MutableStateFlow(ApiState())
@@ -60,9 +61,6 @@ class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
         }
     }
 
-    fun refreshHomeWeather(lon: Float , lat: Float){
-        getCurrentWeather(lon , lat)
-    }
 
     fun insertEmptyHomeWeather(homeWeather: HomeWeather) {
         viewModelScope.launch(Dispatchers.IO){
@@ -110,6 +108,14 @@ class HomeViewModel(var repo :WeatherRepo) : ViewModel(){
                     hourlyWeatherSF.value= ApiState.LocalHourlySuccess(values)
                 }
         }
+    }
+
+    fun insertDefaultSettings(context: Context) {
+        repo.insertDefaultSettings(context)
+    }
+
+    fun getLangSHP(context: Context): String? {
+        return repo.getLangFromPreferences(context)
     }
 
 }
