@@ -38,6 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 class AlertsFragment : Fragment(), ICommunicate{
     lateinit var binding: FragmentAlertsBinding
     lateinit var viewModel : AlertsViewModel
+    lateinit var alarmManager : AlarmManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val alertsFactory = AlertViewModelFactory(WeatherRepo(LocalDataSource(requireContext()), API.retrofitService))
@@ -153,22 +155,7 @@ class AlertsFragment : Fragment(), ICommunicate{
 
 
     private fun scheduleAlert(alert: Alert) {
-        /*
-        //val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(requireContext(), AlertReceiver::class.java)
-        //val pendingIntent = PendingIntent.getBroadcast(requireContext(), alert.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (!alarmManager.canScheduleExactAlarms()) {
-                // Direct the user to the settings page to grant the permission
-                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-                startActivity(intent)
-            }
-            val pendingIntent = PendingIntent.getBroadcast(requireContext(), alert.id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alert.timeInMillis, pendingIntent)
-        }*/
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // Check if the app can schedule exact alarms on Android 12 and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -195,7 +182,7 @@ class AlertsFragment : Fragment(), ICommunicate{
     }
 
     private fun removeAlert(alert: Alert) {
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // Create the same Intent and PendingIntent used to schedule the alert
         val intent = Intent(requireContext(), AlertReceiver::class.java)
