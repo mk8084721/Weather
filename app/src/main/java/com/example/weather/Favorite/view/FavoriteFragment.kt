@@ -1,10 +1,14 @@
 package com.example.weather.Favorite.view
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,9 +37,13 @@ class FavoriteFragment : Fragment() {
     ): View? {
         binding = FragmentFavoriteBinding.inflate(inflater , container , false)
         binding.fabNavigateToMap.setOnClickListener{
-            val action = FavoriteFragmentDirections.actionFavoriteFragmentToMapFragment("fav")
-            // Navigate to MapFragment with the argument
-            findNavController().navigate(action)
+            if(isConnected(requireContext())) {
+                val action = FavoriteFragmentDirections.actionFavoriteFragmentToMapFragment("fav")
+                // Navigate to MapFragment with the argument
+                findNavController().navigate(action)
+            }else{
+                Toast.makeText(requireContext(),"Connect Internet",Toast.LENGTH_SHORT).show()
+            }
         }
         return binding.root
     }
@@ -54,6 +62,11 @@ class FavoriteFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext() , LinearLayoutManager.VERTICAL , false)
             //productAdapter.submitList(readProductsFromFile(this.context,"products.json"))
         }
+    }
+    fun isConnected(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.weather
 
+import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
@@ -93,6 +94,17 @@ class MapFragment : Fragment() {
                     }
                     favViewModel.insertFavWeather(Favorite(geoPoint.longitude , geoPoint.latitude , city))
                     findNavController().navigate(R.id.action_mapFragment_to_favoriteFragment)
+                }else if(args.page == "set"){
+                    val sharedPreferences = requireContext().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+
+                    // Converting double to float
+                    editor.putFloat("lat", geoPoint.latitude.toFloat())
+                    editor.putFloat("lon", geoPoint.longitude.toFloat())
+                    editor.apply()
+                    val action = MapFragmentDirections.actionMapFragmentToSettingsFragment()
+                    // Navigate to MapFragment with the argument
+                    findNavController().navigate(action)
                 }
 
                 return true // Event is consumed

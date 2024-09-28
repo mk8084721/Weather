@@ -82,17 +82,17 @@ class InitialSetupActivity : AppCompatActivity() {
 
         alertBinding.btnOk.setOnClickListener {
             when (alertBinding.radioGroup.checkedRadioButtonId) {
+
                 alertBinding.gpsBtn.id -> {
+                    val sharedPreferences = this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putString("mode", "GPS").apply()
                     getGpsLocation()
-                    /*val intent = Intent(this, MainActivity::class.java)
-                    Log.i("TAG", "showFirstTimeCustomAlert: \nlon : ${coord.longitude} \nlat : ${coord.latitude}")
-                    intent.putExtra("lat", coord.latitude)
-                    intent.putExtra("lon", coord.longitude)
-                    startActivity(intent)*/
 
                 }
                 alertBinding.mapBtn.id -> {
                     //doMapAction()
+                    val sharedPreferences = this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putString("mode", "Map").apply()
                     val mapFragment = MapFragment()
                     val bundle = Bundle()
                     mapFragment.arguments = bundle

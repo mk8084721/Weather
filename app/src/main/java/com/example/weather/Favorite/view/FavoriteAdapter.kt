@@ -1,8 +1,11 @@
 package com.example.weather.Favorite.view
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -30,12 +33,16 @@ class FavoriteAdapter(var viewModel: FavoriteViewModel, var fragment: FavoriteFr
             val currentWeather = getItem(position)
             holder.binding.locationName.text = currentWeather.locationName
             holder.binding.card.setOnClickListener {
-                val action = FavoriteFragmentDirections.actionFavoriteFragmentToHomeFragment(
-                    currentWeather.lon.toFloat(),
-                    currentWeather.lat.toFloat()
-                )
-                Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment)
-                    .navigate(action)
+                if(isConnected(fragment.requireContext())) {
+                    val action = FavoriteFragmentDirections.actionFavoriteFragmentToHomeFragment(
+                        currentWeather.lon.toFloat(),
+                        currentWeather.lat.toFloat()
+                    )
+                    Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment)
+                        .navigate(action)
+                }else{
+                    Toast.makeText(fragment.requireContext(),"Connect Internet",Toast.LENGTH_SHORT).show()
+                }
             }
             holder.binding.deleteFavLocation.setOnClickListener {
                 viewModel.deleteFavWeather(currentWeather)
@@ -56,4 +63,9 @@ class FavoriteAdapter(var viewModel: FavoriteViewModel, var fragment: FavoriteFr
             }
 
         }
+    fun isConnected(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
 }

@@ -71,7 +71,6 @@ class HomeFragment : Fragment() {
         binding.hourlyRV.apply {
             adapter = hourlyAdapter
             layoutManager = LinearLayoutManager(requireContext() , LinearLayoutManager.HORIZONTAL , false)
-            //productAdapter.submitList(readProductsFromFile(this.context,"products.json"))
         }
         if (lon != null && lat!= null) {
             if (lon == 0.0f && lat == 0.0f){
@@ -247,17 +246,25 @@ class HomeFragment : Fragment() {
                                     result ->
                                 when(result){
                                     is ApiState.Loading ->{
-                                        //
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.homePage.visibility = View.GONE
                                     }
                                     is ApiState.Success ->{
+                                        binding.progressBar.visibility = View.GONE
+                                        binding.homePage.visibility = View.VISIBLE
                                         var currentWeather = result.data
                                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                                         var city = "Unknown City"
-                                        val addresses = geocoder.getFromLocation(lat.toDouble(), lon.toDouble(), 1)
-                                        if (!addresses.isNullOrEmpty()) {
-                                            val address = addresses[0]
-                                            city = address.locality ?: "Unknown City"
+                                        try {
+                                            val addresses = geocoder.getFromLocation(lat.toDouble(), lon.toDouble(), 1)
+                                            if (!addresses.isNullOrEmpty()) {
+                                                val address = addresses[0]
+                                                city = address.locality ?: "Unknown City"
+                                            }
+                                        }catch (e : Exception){
+                                            Toast.makeText(requireContext(),"Cant Get The Place",Toast.LENGTH_SHORT).show()
                                         }
+
                                         viewModel.updateHomeWeather(HomeWeather(
                                             1,
                                             lon,
@@ -292,9 +299,12 @@ class HomeFragment : Fragment() {
                                     result ->
                                 when(result){
                                     is ApiState.Loading ->{
-                                        //
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.homePage.visibility = View.GONE
                                     }
                                     is ApiState.ForecastSuccess ->{
+                                        binding.progressBar.visibility = View.GONE
+                                        binding.homePage.visibility = View.VISIBLE
                                         var forecastWeather = result.data.list
                                         var hourlyWeather = mutableListOf<Hourly>()
                                         for (item in forecastWeather){

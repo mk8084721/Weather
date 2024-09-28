@@ -34,4 +34,5 @@
     <string name="weather_snow_night">snow (night)</string>
     <string name="weather_mist_day">mist</string>
     <string name="weather_mist_night">mist (night)</string>
+    <string name="SelectMode">Select Mode</string>
 </resources>

@@ -18,5 +18,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/English"
-        android:textColor="@color/white"/> <!-- Arabic for "Arabic" -->
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SelectMode"
+        android:textColor="@color/white" />
+
+    <RadioGroup
+        android:id="@+id/mode_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Map"
+            android:textColor="@color/white"/>
+
+        <RadioButton
+            android:id="@+id/radio_gps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/GPS"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SelectMode"
+        android:textColor="@color/white" />
+
+    <RadioGroup
+        android:id="@+id/mode_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/cel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Map"
+            android:textColor="@color/white"/>
+
+        <RadioButton
+            android:id="@+id/kel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/GPS"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/feh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/GPS"
+            android:textColor="@color/white"/>
+    </RadioGroup>
 </LinearLayout>
