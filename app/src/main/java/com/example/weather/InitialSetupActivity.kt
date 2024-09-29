@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -55,7 +57,7 @@ class InitialSetupActivity : AppCompatActivity() {
 
         if (isFirstTime(this)) {
             Log.i("TAG", "onCreate: Alert")
-            viewModel.insertEmptyHomeWeather(HomeWeather(1,0.0f,0.0f,"","","","",0.0f,0.0f,"",0,0,0.0f,0))
+            viewModel.insertEmptyHomeWeather(HomeWeather(1,0.0f,0.0f,"","","","",0.0f,0.0f,"",0,0,0.0f,0,""))
             viewModel.insertDefaultSettings(this)
             showFirstTimeCustomAlert()
             setFirstTimeFlag(this, false)
@@ -81,28 +83,35 @@ class InitialSetupActivity : AppCompatActivity() {
             .create()
 
         alertBinding.btnOk.setOnClickListener {
-            when (alertBinding.radioGroup.checkedRadioButtonId) {
+            if(isConnected(this)) {
+                when (alertBinding.radioGroup.checkedRadioButtonId) {
 
-                alertBinding.gpsBtn.id -> {
-                    val sharedPreferences = this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-                    sharedPreferences.edit().putString("mode", "GPS").apply()
-                    getGpsLocation()
+                    alertBinding.gpsBtn.id -> {
+                        val sharedPreferences =
+                            this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("mode", "GPS").apply()
+                        getGpsLocation()
 
+                    }
+
+                    alertBinding.mapBtn.id -> {
+                        //doMapAction()
+                        val sharedPreferences =
+                            this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("mode", "Map").apply()
+                        val mapFragment = MapFragment()
+                        val bundle = Bundle()
+                        mapFragment.arguments = bundle
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView3, mapFragment)
+                            .commit()
+                    }
                 }
-                alertBinding.mapBtn.id -> {
-                    //doMapAction()
-                    val sharedPreferences = this.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-                    sharedPreferences.edit().putString("mode", "Map").apply()
-                    val mapFragment = MapFragment()
-                    val bundle = Bundle()
-                    mapFragment.arguments = bundle
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView3, mapFragment)
-                        .commit()
-                }
+                alertDialog.dismiss()
+            }else{
+                Toast.makeText(this,"Connect To Internet",Toast.LENGTH_SHORT).show()
             }
 
-            alertDialog.dismiss()
         }
 
         alertDialog.show()
@@ -199,5 +208,10 @@ class InitialSetupActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFirstTime", isFirstTime)
         editor.apply()
+    }
+    fun isConnected(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }

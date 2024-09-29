@@ -24,6 +24,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
 import android.view.Display
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.weather.Repo.WeatherRepo
 import com.example.weather.database.ILocalDataSource
 import com.example.weather.database.LocalDataSource
@@ -50,11 +52,12 @@ import kotlinx.coroutines.withContext
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
-
+@RunWith(AndroidJUnit4::class)
 class WeatherRepoTest {
 
     private lateinit var weatherRepo: WeatherRepo
@@ -103,7 +106,7 @@ class WeatherRepoTest {
 // Fake LocalDataSource implementation for testing
 class FakeLocalDataSource() : ILocalDataSource {
     private val homeWeatherList = mutableListOf<HomeWeather>()
-    override var context: Context = TestContext()
+    override var context: Context = ApplicationProvider.getApplicationContext()
 
     override fun getHomeWeather() = flow { emit(homeWeatherList) }
 
@@ -163,6 +166,10 @@ class FakeLocalDataSource() : ILocalDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun deleteAlert(alert: Alert) {
+        TODO("Not yet implemented")
+    }
+
     // Simulate saving location to shared preferences
     fun saveLocation(lat: Float, lon: Float) {
         val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
@@ -218,6 +225,7 @@ class FakeApiService : ApiService {
         )
     }
 }
+/*
 
 // Simulated context for shared preferences
 class TestContext : Context() {
@@ -803,3 +811,4 @@ class TestSharedPreferencesEditor(private val data: MutableMap<String, Float>) :
 
     // Implement other Editor methods if needed
 }
+*/

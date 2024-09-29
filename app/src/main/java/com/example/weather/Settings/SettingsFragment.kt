@@ -133,10 +133,10 @@ class SettingsFragment : Fragment() {
     private fun checkSelectedSpeed() {
         val sharedPreferences = requireActivity().getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         val selectedMode = sharedPreferences.getString("speed", "mt") // Default to Map
-        if (selectedMode == "mt") {
-            radioMeter.isChecked = true
-        } else {
+        if (selectedMode == "mi") {
             radioMile.isChecked = true
+        } else {
+            radioMeter.isChecked = true
         }
     }
 

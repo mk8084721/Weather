@@ -117,4 +117,8 @@ class FakeWeatherRepo() : IWeatherRepo {
     override fun getLangFromPreferences(context: Context): String? {
         TODO("Not yet implemented")
     }
+
+    override fun deleteAlert(alert: Alert) {
+        TODO("Not yet implemented")
+    }
 }

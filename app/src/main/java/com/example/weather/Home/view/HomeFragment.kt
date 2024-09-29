@@ -280,7 +280,8 @@ class HomeFragment : Fragment() {
                                             currentWeather.main.pressure,
                                             currentWeather.main.humidity,
                                             currentWeather.wind.speed,
-                                            currentWeather.clouds.all
+                                            currentWeather.clouds.all,
+                                            currentWeather.weather.get(0).icon
                                         ))
                                     }
                                     is ApiState.Failure->{
@@ -354,7 +355,8 @@ class HomeFragment : Fragment() {
         binding.dateTxt.text = currentWeather.date
         binding.locationName.text = currentWeather.locationName
         binding.tempValue.text = getTemp(currentWeather.weatherTemp)
-        binding.weatherCondition.text = currentWeather.weatherConditionEn
+        binding.weatherImage.setImageResource(WeatherType.fromWeatherID(currentWeather.icon , requireContext()).iconRes)
+        binding.weatherCondition.text = WeatherType.fromWeatherID(currentWeather.icon,requireContext()).weatherDesc
         binding.humidity.text = currentWeather.humidity.toString()
         binding.pressure.text = currentWeather.pressure.toString()
         binding.wind.text = getSpeed(currentWeather.windSpeed)

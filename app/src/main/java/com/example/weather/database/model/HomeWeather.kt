@@ -19,5 +19,6 @@ data class HomeWeather (
     var pressure : Int,
     var humidity : Int,
     var windSpeed : Float,
-    var clouds : Int
+    var clouds : Int,
+    var icon : String
 )

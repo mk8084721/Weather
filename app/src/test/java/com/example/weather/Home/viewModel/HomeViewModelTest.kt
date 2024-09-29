@@ -45,7 +45,8 @@ class HomeViewModelTest {
             "",
             "",
             0.0f,0.0f,"",
-            0,0,0.0f,0
+            0,0,0.0f,0,
+            ""
             )
 
         viewModel.insertEmptyHomeWeather(homeWeather)
