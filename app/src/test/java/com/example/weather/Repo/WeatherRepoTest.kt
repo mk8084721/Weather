@@ -183,20 +183,6 @@ class FakeLocalDataSource() : ILocalDataSource {
 
 // Fake ApiService implementation for testing
 class FakeApiService : ApiService {
-    /*override suspend fun getCurrentWeather(lon: Float, lat: Float): CurrentWeather {
-        return CurrentWeather(Coord(lon,lat), arrayOf(WeatherStatus(1,"","","")),"",
-            Temp(0.0f,0.0f,0.0f,0.0f,0,0,0,0),
-            0,
-            Wind(0.0f,0,0.0f),
-            0,0,"",0,""
-        ) // Return a fake current weather
-    }*/
-
-    /*override suspend fun getWeatherForecast(lon: Float, lat: Float): ForecastWeather {
-        return ForecastWeather(
-            emptyArray()
-        ) // Return a fake forecast weather
-    }*/
 
     override suspend fun getCurrentWeather(
         lon: Float,
